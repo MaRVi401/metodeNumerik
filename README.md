@@ -1,6 +1,4 @@
 
-Tentu, berikut adalah penjelasan kode Anda dalam format `README.md` yang ringkas dan profesional. Anda bisa menyalinnya langsung ke dalam file `README.md` di proyek Anda.
-
 -----
 
 # Newton-Raphson Method
