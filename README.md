@@ -1,43 +1,55 @@
 
 -----
 
-# Newton-Raphson Method
+### **Newton-Raphson Method**
 
-### Finding Roots of Non-Linear Equations
+#### Finding Roots of Non-Linear Equations
 
 [](https://www.python.org/downloads/release/python-3130/)
 
 -----
 
-### Deskripsi Proyek
+### **Tentang Proyek**
 
-Proyek ini adalah implementasi dari **Metode Newton-Raphson**, sebuah algoritma numerik yang digunakan untuk menemukan akar (solusi) dari persamaan non-linear. Program ini memanfaatkan pustaka `sympy` untuk menghitung turunan fungsi secara otomatis, dan pustaka `rich` untuk menampilkan output yang rapi dan menarik di terminal.
+Proyek ini adalah implementasi **Metode Newton-Raphson**, sebuah algoritma numerik yang efisien untuk menemukan akar (solusi) dari persamaan non-linear. Berbeda dengan metode lainnya, pendekatan ini memanfaatkan turunan fungsi untuk mempercepat konvergensi menuju solusi.
+
+Program ini dirancang untuk:
+
+  * Mencari turunan fungsi secara otomatis menggunakan pustaka **SymPy**.
+  * Menampilkan proses iterasi dan hasil akhir dengan tabel yang terstruktur dan berwarna menggunakan pustaka **Rich**.
 
 -----
 
-### Cara Menjalankan Program
+### **Cara Menjalankan**
 
-#### 1\. Persiapan Lingkungan
+Ikuti langkah-langkah di bawah ini untuk menginstal dependensi dan menjalankan program.
 
-Proyek ini memerlukan **Python 3.13** dan beberapa pustaka tambahan. Disarankan untuk menggunakan **lingkungan virtual (venv)** untuk mengisolasi dependensi.
+#### **1. Persiapan Lingkungan**
+
+Proyek ini membutuhkan Python 3.13. Disarankan untuk menggunakan **lingkungan virtual** (`venv`) untuk mengisolasi dependensi dan menghindari konflik dengan proyek lain.
 
 ```bash
-# Buat dan aktifkan lingkungan virtual
+# Buat lingkungan virtual
 python -m venv .venv
+
+# Aktifkan lingkungan virtual
+# Pada Windows
 .\.venv\Scripts\activate
+# Pada macOS/Linux
+source .venv/bin/activate
 ```
 
-#### 2\. Instalasi Dependensi
+#### **2. Instalasi Dependensi**
 
-Setelah lingkungan virtual aktif, instal pustaka yang diperlukan (`sympy` dan `rich`) menggunakan `pip`:
+Setelah lingkungan virtual aktif, instal pustaka yang dibutuhkan (`sympy` dan `rich`) menggunakan `pip`.
 
 ```bash
 pip install sympy rich
 ```
 
-#### 3\. Menjalankan Kode
+#### **3. Menjalankan Kode**
 
-Jalankan skrip utama dari terminal:
+Setelah instalasi selesai, jalankan skrip utama dari terminal:
 
 ```bash
 python newton-rapshon.py
@@ -45,31 +57,41 @@ python newton-rapshon.py
 
 -----
 
-### Analisis Kode
+### **Penjelasan Kode**
 
-  * **Pustaka `sympy`**: Digunakan untuk melakukan kalkulus simbolis. Ini memungkinkan program menghitung turunan dari fungsi $f(x)$ secara otomatis, menghilangkan kebutuhan untuk memasukkan turunan secara manual.
+#### **1. Komponen Utama**
 
-      * `sp.symbols('x')`: Mendefinisikan `x` sebagai variabel simbolis.
-      * `sp.diff(f, x)`: Menghitung turunan pertama dari fungsi.
+  * **Pustaka `sympy`**: Perpustakaan matematika simbolis yang memungkinkan program ini menghitung **turunan** (`sp.diff()`) dari fungsi secara otomatis, yang merupakan inti dari algoritma Newton-Raphson.
+  * **Pustaka `rich`**: Digunakan untuk meningkatkan tampilan output di terminal. `Console()` memungkinkan output berwarna dan `Table()` memformat data iterasi menjadi tabel yang rapi dan mudah dibaca.
 
-  * **Pustaka `rich`**: Digunakan untuk memformat output di terminal, membuatnya lebih mudah dibaca dan menarik secara visual dengan tabel dan teks berwarna.
+#### **2. Fungsi `newton_raphson`**
 
-      * `Console()`: Objek utama untuk mencetak output.
-      * `Table()`: Membuat tabel terstruktur untuk menampilkan setiap iterasi.
+Ini adalah fungsi utama yang mengimplementasikan algoritma.
 
-  * **Fungsi `newton_raphson`**:
+  * **Parameter**:
+      * `f`: Fungsi non-linear yang akarnya akan dicari.
+      * `x0`: **Tebakan awal** (`initial guess`) yang menjadi titik permulaan iterasi.
+      * `tol`: **Toleransi error** yang menentukan kapan iterasi harus berhenti (misalnya, `1e-6` untuk akurasi tinggi).
+      * `max_iter`: Jumlah iterasi maksimum untuk mencegah perulangan tak terbatas.
 
-      * Ini adalah inti dari program. Fungsi ini menerima fungsi, tebakan awal (`x0`), toleransi, dan jumlah iterasi maksimum.
-      * Rumus inti yang digunakan:
+#### **3. Alur Algoritma**
+
+1.  **Inisialisasi**: Variabel `x` diinisialisasi dengan `x0`.
+2.  **Perhitungan Turunan**: Pustaka `sympy` menghitung turunan fungsi $f(x)$ dan mengubahnya menjadi fungsi numerik yang siap digunakan.
+3.  **Iterasi (Loop)**:
+      * Di setiap iterasi, nilai `f(x)` dan `f'(x)` dihitung pada titik `x` saat ini.
+      * **Rumus Newton-Raphson** diterapkan:
         $$x_{i+1} = x_i - \frac{f(x_i)}{f'(x_i)}$$
-      * Loop iterasi akan terus berjalan sampai nilai `x` konvergen (perubahannya lebih kecil dari `tol`) atau mencapai batas iterasi maksimum.
+      * Rumus ini menghasilkan tebakan baru (`x_{i+1}`) yang secara geometris merupakan perpotongan garis singgung dengan sumbu-x.
+4.  **Kondisi Berhenti**:
+      * Jika perubahan antara tebakan baru dan tebakan sebelumnya (`|x_{i+1} - x_i|`) lebih kecil dari `tol`, konvergensi dianggap tercapai, dan loop berhenti.
+      * Jika `max_iter` tercapai tanpa konvergensi, program akan memberikan pesan bahwa metode gagal menemukan akar dalam batas yang ditentukan.
 
 -----
 
-### Contoh Penggunaan
+### **Contoh Penggunaan**
 
-Kode ini sudah menyediakan contoh untuk mencari akar dari persamaan $f(x) = x^2 - 2$, di mana akarnya adalah $\\sqrt{2} \\approx 1.414213$.
+Program ini menyertakan contoh untuk menemukan akar dari persamaan $f(x) = x^2 - 2$, di mana akarnya adalah $\\sqrt{2} \\approx 1.414213$.
 
-**Output dari program akan terlihat seperti ini:**
-
-Program akan menampilkan tabel iterasi secara rinci, diikuti dengan ringkasan hasil akhir.
+**Output di Terminal:**
+Program akan menampilkan tabel yang merinci setiap iterasi, diikuti dengan ringkasan hasil akhir yang jelas.
